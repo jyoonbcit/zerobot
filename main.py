@@ -5,15 +5,11 @@
 import discord
 import os
 
+
 intents = discord.Intents(members=True, messages=True, guilds=True)
 client = discord.Client(intents=intents)
 # Lets the bot listen for specific messages
 intents.message_content = True
-# intents.manage_messages = True
-# intents.read_message_history = True
-
-# Instantiate
-# textChannel = discord.TextChannel(state = , guild = member.guild.name, data = )
 
 
 @client.event
