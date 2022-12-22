@@ -28,11 +28,11 @@ async def on_message(message):
     await message.channel.send(f'Hello {message.author}')
 
   if "who asked" in message.content:
-    discord.guild.kick(user=message.author, reason='I asked.')
+    await message.guild.kick(user = message.author, reason = 'I asked. :society:')
+    await message.message.author.send('Say something if this message is sent.')
 
 
 async def prune_messages(message):
-  print(message.content)
   if message.content.startswith('$prune') and len(
       message.content) > len('$prune ') and await admin_role_check(message.author, message):
     to_delete = int(message.content[7:]) + 1
@@ -40,7 +40,6 @@ async def prune_messages(message):
     channel = message.channel
     async for msg in channel.history():
       msgs.append(msg)
-    print(list(msg.content for msg in msgs))
     await discord.TextChannel.delete_messages(message.channel,
                                         messages=msgs[1:to_delete])
     await message.channel.send(f'Deleted {int(message.content[7:])} messages.')
