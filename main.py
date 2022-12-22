@@ -38,7 +38,7 @@ async def on_message(message):
 async def prune_messages(message):
   print(message.content)
   if message.content.startswith('$prune') and len(
-      message.content) > len('$prune '):
+      message.content) > len('$prune ') and await admin_role_check(message.author, message):
     to_delete = int(message.content[7:]) + 1
     msgs = []
     channel = message.channel
@@ -48,6 +48,13 @@ async def prune_messages(message):
     await discord.TextChannel.delete_messages(message.channel,
                                         messages=msgs[1:to_delete])
     await message.channel.send(f'Deleted {int(message.content[7:])} messages.')
+
+
+async def admin_role_check(member, message):
+  if 1044772565740179456 not in list(role.id for role in member.roles):
+    await message.channel.send('Not enough permissions bozo...')
+    return False
+  return True
 
 
 client.run(os.getenv('TOKEN'))
