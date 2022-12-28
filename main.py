@@ -25,7 +25,7 @@ async def on_message(message):
   await prune_messages(message)
 
   if message.author == client.user:
-    return
+    return None
 
   if message.content.startswith('$greetings'):
     await message.channel.send(f'Hello {message.author}')
@@ -62,6 +62,7 @@ async def points_daily(message):
       await points_new_user(message)
       return None
     if datetime.strptime(data[author]['last_daily'], '%m/%d/%y %H:%M:%S') - datetime.now() < timedelta(days = 1):
+      # -8 hours to compensate for PST
       await message.channel.send(
         'Your daily bonus is not ready yet. Check back at '
         f'{datetime.strptime(data[author]["last_daily"], "%m/%d/%y %H:%M:%S") + timedelta(days = 1, hours = -8)}'
