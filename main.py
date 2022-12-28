@@ -4,6 +4,7 @@
 
 import discord
 import os
+import json
 
 
 intents = discord.Intents(members=True, messages=True, guilds=True)
@@ -27,6 +28,47 @@ async def on_message(message):
 
   if message.content.startswith('$greetings'):
     await message.channel.send(f'Hello {message.author}')
+
+
+  if message.content == '$daily':
+    await points_daily(message)
+
+
+@client.event
+async def points_new_user(message):
+  author = str(message.author)
+  with open('users.json', 'r') as lb:
+    data = json.load(lb)
+
+  data[author] = dict()
+  data[author]['points'] = 100
+
+  with open('users.json', 'w') as lb:
+    json.dump(data, lb)
+
+  await message.channel.send('New user created with 100 points.')
+
+
+@client.event
+async def points_daily(message):
+  author = str(message.author)
+  with open('users.json', 'r') as lb:
+    data = json.load(lb)
+    lb.seek(0)
+    # Check if user exists in save file
+    if author not in lb.read():
+      await points_new_user(message)
+      return None
+    # If user exists, continue
+
+  # Read current amount of points belonging to user, add 100
+  current_points = data[author]['points']
+  data[author]['points'] = 100 + current_points
+  
+  with open('users.json', "w") as lb:
+    json.dump(data, lb)
+
+  await message.channel.send(f'User {message.author} has {data[author]["points"]} points.')
 
 
 async def prune_messages(message):
