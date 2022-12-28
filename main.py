@@ -21,6 +21,7 @@ async def on_ready():
 
 @client.event
 async def on_message(message):
+  author = str(message.author)
   print(message.content)
   await prune_messages(message)
 
@@ -33,6 +34,33 @@ async def on_message(message):
   if message.content == '$daily':
     await points_daily(message)
 
+  if message.content == '$balance' or message.content == '$bal':
+    with open('users.json', 'r') as lb:
+      data = json.load(lb)
+    await message.channel.send(f'{author} has {data[author]["points"]} points.')
+
+  if message.content == '$leaderboard' or message.content == '$lb':
+    lb_str = ""
+    with open('users.json', 'r') as lb:
+      data = json.load(lb)
+      lb.seek(0)
+    # TODO: Make data displayed limited to 10; maybe add separate pages to display more
+    for user in data:
+      lb_str += "**"
+      lb_str += user
+      lb_str += "**\n"
+      lb_str += str(data[user]['points'])
+      lb_str += " points\n"
+    await message.channel.send(lb_str)
+
+  if message.content == '$help':
+    help_str = ""
+    with open('README.md', 'r') as helpfile:
+      lines = helpfile.readlines()
+      for line in lines:
+        help_str += line
+
+    await message.channel.send(help_str)
 
 @client.event
 async def points_new_user(message):
@@ -61,8 +89,9 @@ async def points_daily(message):
     if author not in lb.read():
       await points_new_user(message)
       return None
-    if datetime.strptime(data[author]['last_daily'], '%m/%d/%y %H:%M:%S') - datetime.now() < timedelta(days = 1):
+    if datetime.now() - datetime.strptime(data[author]['last_daily'], '%m/%d/%y %H:%M:%S') < timedelta(days = 1):
       # -8 hours to compensate for PST
+      print(datetime.strptime(data[author]['last_daily'], '%m/%d/%y %H:%M:%S') - datetime.now())
       await message.channel.send(
         'Your daily bonus is not ready yet. Check back at '
         f'{datetime.strptime(data[author]["last_daily"], "%m/%d/%y %H:%M:%S") + timedelta(days = 1, hours = -8)}'
@@ -73,11 +102,12 @@ async def points_daily(message):
   # Read current amount of points belonging to user, add 100
   current_points = data[author]['points']
   data[author]['points'] = 100 + current_points
+  data[author]['last_daily'] = datetime.now().strftime('%m/%d/%y %H:%M:%S')
   
   with open('users.json', "w") as lb:
     json.dump(data, lb)
 
-  await message.channel.send(f'User {message.author} has {data[author]["points"]} points.')
+  await message.channel.send(f'Daily bonus claimed! User {message.author} has {data[author]["points"]} points.')
 
 
 async def prune_messages(message):
