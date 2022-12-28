@@ -19,6 +19,7 @@ async def on_ready():
 
 @client.event
 async def on_message(message):
+  print(message.content)
   await prune_messages(message)
 
   if message.author == client.user:
@@ -26,10 +27,6 @@ async def on_message(message):
 
   if message.content.startswith('$greetings'):
     await message.channel.send(f'Hello {message.author}')
-
-  if "who asked" in message.content:
-    await message.guild.kick(user = message.author, reason = 'I asked. :society:')
-    await message.message.author.send('Say something if this message is sent.')
 
 
 async def prune_messages(message):
