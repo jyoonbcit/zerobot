@@ -5,6 +5,7 @@
 import discord
 import os
 import json
+from datetime import datetime, timedelta
 
 
 intents = discord.Intents(members=True, messages=True, guilds=True)
@@ -28,8 +29,7 @@ async def on_message(message):
 
   if message.content.startswith('$greetings'):
     await message.channel.send(f'Hello {message.author}')
-
-
+    
   if message.content == '$daily':
     await points_daily(message)
 
@@ -42,6 +42,7 @@ async def points_new_user(message):
 
   data[author] = dict()
   data[author]['points'] = 100
+  data[author]['last_daily'] = datetime.now().strftime('%m/%d/%y %H:%M:%S')
 
   with open('users.json', 'w') as lb:
     json.dump(data, lb)
@@ -54,10 +55,17 @@ async def points_daily(message):
   author = str(message.author)
   with open('users.json', 'r') as lb:
     data = json.load(lb)
+    # Return to first line, prevents JSONDecodeError
     lb.seek(0)
     # Check if user exists in save file
     if author not in lb.read():
       await points_new_user(message)
+      return None
+    if datetime.strptime(data[author]['last_daily'], '%m/%d/%y %H:%M:%S') - datetime.now() < timedelta(days = 1):
+      await message.channel.send(
+        'Your daily bonus is not ready yet. Check back at '
+        f'{datetime.strptime(data[author]["last_daily"], "%m/%d/%y %H:%M:%S") + timedelta(days = 1, hours = -8)}'
+      )
       return None
     # If user exists, continue
 

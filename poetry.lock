@@ -117,6 +117,14 @@ optional = false
 python-versions = ">=3.7"
 
 [[package]]
+name = "schedule"
+version = "1.1.0"
+description = "Job scheduling for humans."
+category = "main"
+optional = false
+python-versions = ">=3.6"
+
+[[package]]
 name = "yarl"
 version = "1.8.2"
 description = "Yet another URL library"
@@ -131,7 +139,7 @@ multidict = ">=4.0"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8"
-content-hash = "5974ccf4c10875f3b345dc588196981cf29652c3452905ede8b37a61ce940a06"
+content-hash = "b13e97c2e52148d9d2fbc3f420bd89a7948a85ed061ac698f0a4c87e4c368ecc"
 
 [metadata.files]
 aiohttp = []
@@ -144,4 +152,5 @@ discord = []
 frozenlist = []
 idna = []
 multidict = []
+schedule = []
 yarl = []
