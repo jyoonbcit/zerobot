@@ -5,6 +5,7 @@
 import discord
 import os
 import json
+import random
 from datetime import datetime, timedelta
 
 
@@ -61,6 +62,24 @@ async def on_message(message):
         help_str += line
 
     await message.channel.send(help_str)
+
+  if message.content.startswith('$coinflip'):
+    wager = int(message.content[10:])
+    with open('users.json', 'r') as lb:
+      data = json.load(lb)
+      lb.seek(0)
+
+    coin = random.randint(0, 1)
+    if coin == 1:
+      data[author]['points'] += wager
+      await message.channel.send(f"You've rolled heads! Earned {wager} points. You now have {data[author]['points']} points.")
+    else:
+      data[author]['points'] -= wager
+      await message.channel.send(f"Unlucky, you've rolled tails. Lost {wager} points. You now have {data[author]['points']} points.")
+
+    with open('users.json', 'w') as lb:
+      data = json.dump(data, lb)
+    
 
 @client.event
 async def points_new_user(message):
