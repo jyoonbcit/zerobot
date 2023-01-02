@@ -3,9 +3,11 @@
 """
 
 import discord
-import os
 import json
+import os
 import random
+import re
+import requests
 from datetime import datetime, timedelta
 
 
@@ -54,15 +56,6 @@ async def on_message(message):
       lb_str += " points\n"
     await message.channel.send(lb_str)
 
-  if message.content == '$help':
-    help_str = ""
-    with open('README.md', 'r') as helpfile:
-      lines = helpfile.readlines()
-      for line in lines:
-        help_str += line
-
-    await message.channel.send(help_str)
-
   if message.content.startswith('$coinflip'):
     wager = int(message.content[10:])
     with open('users.json', 'r') as lb:
@@ -79,6 +72,22 @@ async def on_message(message):
 
     with open('users.json', 'w') as lb:
       data = json.dump(data, lb)
+
+  if message.content.startswith('$rankcheck'):
+    username = re.search('\$rankcheck (.*)\#', message.content).group(1)
+    tag_index = message.content.index('#')
+    tag = message.content[tag_index + 1:]
+    response = requests.get(f'https://api.kyroskoh.xyz/valorant/v1/mmr/na/{username}/{tag}')
+    await message.channel.send(response.text)
+    
+  if message.content == '$help':
+    help_str = ""
+    with open('README.md', 'r') as helpfile:
+      lines = helpfile.readlines()
+      for line in lines:
+        help_str += line
+
+    await message.channel.send(help_str)
     
 
 @client.event
