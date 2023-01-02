@@ -29,9 +29,6 @@ async def on_message(message):
   print(message.content)
   await prune_messages(message)
 
-  if message.author == client.user:
-    return None
-
   if message.content.startswith('$greetings'):
     await message.channel.send(f'Hello {message.author}')
     
@@ -62,7 +59,6 @@ async def on_message(message):
     with open('users.json', 'r') as lb:
       data = json.load(lb)
       lb.seek(0)
-
     coin = random.randint(0, 1)
     if coin == 1:
       data[author]['points'] += wager
@@ -100,7 +96,6 @@ async def on_message(message):
       lines = helpfile.readlines()
       for line in lines:
         help_str += line
-
     await message.channel.send(help_str)
     
 
