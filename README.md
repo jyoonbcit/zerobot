@@ -14,4 +14,4 @@ API:
 *used to check Valorant rank*
 **$translate [message>>>language]**
 *to check possible languages, visit: 
-https://www.deepl.com/docs-api/translate-text/large-volumes/*
+<https://www.deepl.com/docs-api/translate-text/large-volumes/>*
