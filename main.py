@@ -157,7 +157,7 @@ async def prune_messages(message):
       msgs.append(msg)
     await discord.TextChannel.delete_messages(message.channel,
                                         messages=msgs[1:to_delete])
-    await message.channel.send(f'Deleted {int(message.content[7:])} messages.')
+    print(f'Deleted {int(message.content[7:])} messages.')
 
 
 async def admin_role_check(member, message):
