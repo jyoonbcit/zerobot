@@ -7,7 +7,7 @@
 ### $leaderboard or $lb
 
 ## Games:
-###$coinflip [amount]
+### $coinflip [amount]
 
 ## API:
 ### **$rankcheck [name#XXXX]**
