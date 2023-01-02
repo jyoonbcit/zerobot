@@ -11,6 +11,7 @@ import requests
 from datetime import datetime, timedelta
 
 
+deepl = os.environ['DEEPLAPIKEY']
 intents = discord.Intents(members=True, messages=True, guilds=True)
 client = discord.Client(intents=intents)
 # Lets the bot listen for specific messages
@@ -78,7 +79,20 @@ async def on_message(message):
     tag_index = message.content.index('#')
     tag = message.content[tag_index + 1:]
     response = requests.get(f'https://api.kyroskoh.xyz/valorant/v1/mmr/na/{username}/{tag}')
-    await message.channel.send(response.text)
+    if response.status_code != 200:
+      print(response.text)
+      await message.channel.send("Error! Maybe you aren't currently ranked?")
+    else:
+      print(response.status_code)
+      await message.channel.send(response.text)
+
+  if message.content.startswith('$translate'):
+    to_translate = re.search('\$translate (.*)>>>', message.content).group(1)
+    language_index = message.content.index('>>>')
+    language_destination = message.content[language_index + 3:].capitalize()
+    response = requests.get(f'https://api-free.deepl.com/v2/translate?auth_key={deepl}&text={to_translate}&target_lang={language_destination}')
+    response_json = response.json()
+    await message.channel.send(response_json['translations'][0]['text'])
     
   if message.content == '$help':
     help_str = ""
