@@ -20,11 +20,18 @@ intents.message_content = True
 
 @client.event
 async def on_ready():
+  """
+  Prints a message on console if bot successfully connects.
+  """
   print('We have logged in as {0.user}'.format(client))
 
 
 @client.event
 async def on_message(message):
+  """
+  Responds with a specific action whenever a specific message is sent in a channel the bot has access to.
+  """
+  # TODO: Simplify function -- currently too long
   author = str(message.author)
   print(message.content)
   await prune_messages(message)
@@ -101,6 +108,9 @@ async def on_message(message):
 
 @client.event
 async def points_new_user(message):
+  """
+  Generates new user data and records it into /users.json
+  """
   author = str(message.author)
   with open('users.json', 'r') as lb:
     data = json.load(lb)
@@ -117,6 +127,9 @@ async def points_new_user(message):
 
 @client.event
 async def points_daily(message):
+  """
+  Gives users 100 points if they meet the 24-hour time restriction.
+  """
   author = str(message.author)
   with open('users.json', 'r') as lb:
     data = json.load(lb)
@@ -148,6 +161,9 @@ async def points_daily(message):
 
 
 async def prune_messages(message):
+  """
+  Deletes a specified number of messages from the channel in which the command is called.
+  """
   if message.content.startswith('$prune') and len(
       message.content) > len('$prune ') and await admin_role_check(message.author, message):
     to_delete = int(message.content[7:]) + 1
@@ -161,8 +177,11 @@ async def prune_messages(message):
 
 
 async def admin_role_check(member, message):
+  """
+  Checks if the user meets the role requirements.
+  """
   if 1044772565740179456 not in list(role.id for role in member.roles):
-    await message.channel.send('Not enough permissions bozo...')
+    await message.channel.send('Not enough permissions.')
     return False
   return True
 

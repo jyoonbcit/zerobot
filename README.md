@@ -15,3 +15,6 @@
 ### **$translate [message>>>language]**
 *to check possible languages, visit: 
 <https://www.deepl.com/docs-api/translate-text/large-volumes/>*
+
+## ETC:
+TODO comments represents low priority tasks.
