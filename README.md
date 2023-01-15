@@ -1,9 +1,9 @@
 # **zerobot**
 ## Introduction
-zerobot is a [Discord](https://discord.com/) bot that I've developed over the winter break.<br>
+zerobot is a [Discord](<https://discord.com/>) bot that I've developed over the winter break.<br>
 It has the ability to detect messages in Discord text channels, and respond to them in a specified manner.<br>
-zerobot was developed using the language Python, and mainly uses the [Discord.py](https://github.com/Rapptz/discord.py) library.<br>
-It is deployed through [Replit](https://repl.it/), an online IDE that provides the ability to host the bot online 24/7.<br>
+zerobot was developed using the language Python, and mainly uses the [Discord.py](<https://github.com/Rapptz/discord.py>) library.<br>
+It is deployed through [Replit](<https://repl.it/>), an online IDE that provides the ability to host the bot online 24/7.<br>
 
 ## Commands
 ### $greetings
